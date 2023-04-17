@@ -1,3 +1,5 @@
+![score](image/skyline_energy_grades.png "header")
+
 # Problem Statement
 Energy usage prediction is important for New York City (NYC) for several reasons:<br>
 
@@ -11,14 +13,14 @@ Building Energy Management: NYC has a large building stock, and accurate energy 
 
 Climate Resilience Planning: Energy usage predictions can also support climate resilience planning in NYC. Understanding future energy demand can help identify vulnerabilities and risks related to energy supply and demand during extreme weather events or other climate-related disruptions. This information can be used to develop strategies to enhance the resilience of NYC's energy infrastructure and systems to climate impacts.<br> [source](https://www.nyc.gov/site/sustainability/codes/energy-benchmarking.page)<br>
 
-This project aims to develop a machine learning model that can predict annual energy usage per square feet in new york city using 2021 NYC buildings.<br>
+This project aims to develop a machine learning model that can predict annual energy usage per square feet in new york city using 2021 NYC buildings data.<br>
 
 
 # Data Description
-The dataset used in this analysis consists of 29842 NYC properties and 243 features (both continuos numeric and discrete and categorical):
+The dataset used in this analysis consists of 29842 NYC properties and 243 features (both continuos numeric and discrete and categorical):<br>
 *[`main_data`]('./data/nyc-bldg2021.csv'): New York Ciry's energy use 2021.[source](https://www.urbangreencouncil.org/what-we-do/exploring-nyc-building-data/)<br>
 
-After cleaning the datasets, two final datasets were created:
+After cleaning the datasets, two final datasets were created:<br>
 *[`eda_data`]('./data/nyc-energy-usage-2021.csv'): Dataset to perfom Exploratory Data Analysis.
 *[`model_data`]('./data/nyc_bldg2021_model_ready.csv'): Dataset to predict energy usage per square feet of properties.
 
@@ -80,7 +82,7 @@ Statistical Inferences:To assess whether the observed relationship is statistica
 ## Executive Summary
 The first step in this analysis was cleaning the dataset and dropping any unnecessary columns. This included dropping several columns which had alot of missing values. The next step was organizing the features into categorical and continuous variables for upcoming feature engineering in the model. During the data cleaning process it was noticed that some features such as 'occupancy', 'number_of_energy_meters'have too many zeros. Therefore, I decided to redefine these feature into categorical features. 
 
-The second step of the analysis involved visualizing the dataset using histograms, map plot and scatterplots. In this step, I decided which features to keep for modeling and which features could be dropped. After primary cleaning of the data and choosing the features, distribution of the selected features were plotted. The distribution plots show two of the features are ............ The log value of 'property_gfa' and 'multifamily_gfa' are used to normalize their distribution. (For some insight about data, please refer to Apendix, at the end of this report.)<br>
+The second step of the analysis involved visualizing the dataset using histograms, map plot and scatterplots. In this step, I decided which features to keep for modeling and which features could be dropped. After primary cleaning of the data and choosing the features, distribution of the selected features were plotted. The distribution plots show two of the features are extremely skewed. The log value of 'property_gfa' and 'multifamily_gfa' are used to normalize their distribution. (For some insight about data, please refer to Apendix, at the end of this report.)<br>
 
 After preprocessing the features, the numeric features were standardized and the categorical features were encoded. Three different regression models of Multi-Linear, Ridge, and LASSO regression alongside with Random Forest model were used to analyze the features and their interactions. <br>
 
@@ -110,6 +112,15 @@ The table below represents the first 10 features which cause the most increase i
 
 
 # Statistical Inferences of Linear Regression Model
+For every one percentage point increase "green_electricity_percent" feature, energy use will increase by 0.004 KBtu/Ft, which is an unexpected result.<br>
+
+Older buildings consume more energy per area and it is expected,on average, when a building is older by one year its energy use per area is 0.8 KBtu.Sqft higher. This effect is nonlinear with deminishing marginal effects, as indicated by the negative sign of "building_age^2" feature.<br>
+
+Also from the interaction effects between "building_age" and geographic coordinates ("latitude" and "longtitude"), we can infere that the effect is location dependent. Such that, building_age has smaller effect as we go toward north and larger effect as we go far east.<br>
+
+Being located in Staten Island, there is a strong indicator of high energy use per area. This may be due to the fact that a lot of energy intesive buildings (such as power plants) are located in Staten Island.<br>
+
+Buildings categorized as subsidized housing have higher energy use on average by 6.32 KBtu/SqFt. One possible explanation for this observation could be that there is less investment on energy efficiency (for instance upgraded technology, insulation and so on) which are normally expensive and less affordable.
 
 # Conclusion
 In summary, energy usage prediction is important for NYC as it can support grid planning and operation, energy policy and regulation, resource allocation and investment decisions, building energy management, and climate resilience planning. Accurate predictions of energy usage for the next year can facilitate effective energy management, resource planning, renewable energy integration, energy efficiency planning, and climate change mitigation efforts, benefiting various stakeholders including businesses, households, utility companies, and policymakers.<br>
@@ -120,17 +131,28 @@ The energy usage of buildings in NYC varies widely depending on factors such as 
 
 
 # Recommendations
+Energy usage of a building depends on alot of factors.
+Predicting energy usage of a building using the current dataset is challenging because this dataset contains few explanatory variables.  
+Also to have a better prediction model of energy usage, gathering data of buildings for several years could be beneficial. Prior years usage of energy can predict how much a biuilding consumes in following years.<br>
 
-Predicting energy usage of a building relying on one year data could be............
-To have a better prediction model of energy usage, gathering data of buildings for several years could be help to have a precise model.<br>
+One of the recommendations that we can offer is based on the findings on the effect of building age and energy consumption. Given the facts that more than 75 percent of the buildings in NYC age over 50 years, and that energy consumption increases with building age, one practical policy could be to upgrade older buildings to make them in par with newer ones. We can estimate the reduction in energy consumption coming from such upgrades based on the result of our model.<br>
 
-To improve the energy efficiency of buildings in NYC, the city has to implement several initiatives including laws that require building owners to measure and report their energy usage, as well as regulations that mandate energy-efficient upgrades for certain types of buildings.<br>
+Based on the result of our model it seems paradoxically greener buildings consume more energy. There are at least two explanation for it; first is that the causality may go the other way. That is buildings with high energy consumption like industrial buildings also tend to have a higher percentage of their energy  from green sources. Another explanation is that some explanatory variables are missing from our model and as a result the marginal effect of green electricity percent is not estimated accurately and appears with the wrong sign. So we can not confidently offer any recommendation when it comes focusing on increasing the percentage of green energy in buildings energy consumption.<br>
 
-The city also needs to promot the use of renewable energy and electrification in buildings. This includes increasing access to renewable energy sources like solar power, incentivizing the installation of electric vehicle charging stations, and promoting the use of electric heating and cooling systems instead of fossil fuel-based systems.<br>
-
-Requiring building owners to annually disclose their energy consumption and emissions data increases transparency and accountability for building emissions. This information helps building owners and tenants make informed decisions about energy use and can drive improvements in energy efficiency.<br>
-
-The city should invest on raising awareness about the importance of reducing emissions and energy usage.<br>
+Ultimately requiring all the buildings to annually disclose their energy consumption and emissions data will generate many more data points which will allow researchers to build more accurate models and make better predictions than what we currently can. This information also helps the city make more informed decision .<br>
 
 ## Apendix
+1. Distribution of buildings in five boroughs:
 <div class='tableauPlaceholder' id='viz1681494430186' style='position: relative'><noscript><a href='#'><img alt='dash1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash11_16814856149470&#47;dash1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='dash11_16814856149470&#47;dash1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash11_16814856149470&#47;dash1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>            
+
+<br>
+2. Energy use average per square feet by borough:
+<div class='tableauPlaceholder' id='viz1681440863645' style='position: relative'><noscript><a href='#'><img alt='dash3 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash3_16814408466140&#47;dash3&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='dash3_16814408466140&#47;dash3' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash3_16814408466140&#47;dash3&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>    
+
+<br>
+3. Total carbon emission by borough:
+<div class='tableauPlaceholder' id='viz1681607660194' style='position: relative'><noscript><a href='#'><img alt='Dashboard 20 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash12_16816076397960&#47;Dashboard20&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='dash12_16816076397960&#47;Dashboard20' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;da&#47;dash12_16816076397960&#47;Dashboard20&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                
+
+<br>
+4. 
+<div class='tableauPlaceholder' id='viz1681485915861' style='position: relative'><noscript><a href='#'><img alt='Energy Use v. Electricity, Gas ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;en&#47;energyusev_elec_gas&#47;EnergyUsev_ElectricityGas&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='energyusev_elec_gas&#47;EnergyUsev_ElectricityGas' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;en&#47;energyusev_elec_gas&#47;EnergyUsev_ElectricityGas&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                
